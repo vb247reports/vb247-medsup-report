@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VB247 - Med Supp 2.0 EOD Report | July 6-10, 2026</title>
+<title>VB247 - Med Supp 2.0 EOD Report</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -57,6 +57,25 @@ tailwind.config = {
 </head>
 <body>
 
+<!-- ====== ARCHIVE DROPDOWN ====== -->
+<div id="archiveDropdown" style="position:fixed;top:1rem;right:5rem;z-index:200;">
+  <select id="weekSelector" onchange="loadWeek(this.value)" style="
+    background:rgba(15,23,42,0.95);
+    border:1px solid rgba(59,130,246,0.4);
+    color:#e2e8f0;
+    padding:8px 16px;
+    border-radius:8px;
+    font-size:0.78rem;
+    font-family:Inter,sans-serif;
+    cursor:pointer;
+    outline:none;
+    backdrop-filter:blur(8px);
+    min-width:220px;">
+    <option>Loading weeks...</option>
+  </select>
+</div>
+<!-- ====== END ARCHIVE DROPDOWN ====== -->
+
 <button class="nav-btn prev" onclick="changeSlide(-1)" id="prevBtn" disabled>
   <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 3L5 8l5 5"/></svg>
 </button>
@@ -79,15 +98,15 @@ tailwind.config = {
     </div>
     <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10">
       <svg width="16" height="16" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M2 7h12M5 1v4M11 1v4"/></svg>
-      <span class="text-white font-medium">July 6 – 10, 2026</span>
+      <span class="text-white font-medium" id="title-week-label">July 6 – 10, 2026</span>
     </div>
   </div>
   <div class="mt-16 flex gap-8 text-center">
-    <div><p class="text-3xl font-bold text-white">40,317</p><p class="text-xs text-slate-500 mt-1">Total Calls</p></div>
+    <div><p class="text-3xl font-bold text-white" id="stat-total-calls">40,317</p><p class="text-xs text-slate-500 mt-1">Total Calls</p></div>
     <div class="w-px bg-white/10"></div>
-    <div><p class="text-3xl font-bold text-vb-blue">557</p><p class="text-xs text-slate-500 mt-1">Total Transfers</p></div>
+    <div><p class="text-3xl font-bold text-vb-blue" id="stat-total-transfers">557</p><p class="text-xs text-slate-500 mt-1">Total Transfers</p></div>
     <div class="w-px bg-white/10"></div>
-    <div><p class="text-3xl font-bold text-emerald-400">1.38%</p><p class="text-xs text-slate-500 mt-1">Transfer Rate</p></div>
+    <div><p class="text-3xl font-bold text-emerald-400" id="stat-transfer-rate">1.38%</p><p class="text-xs text-slate-500 mt-1">Transfer Rate</p></div>
   </div>
 </div>
 
@@ -107,8 +126,8 @@ tailwind.config = {
 <div class="slide" id="slide-2">
   <img src="https://z-cdn-media.chatglm.cn/files/84d639c7-03b2-4a60-b8c7-72a651208e51.png?auth_key=1883804402-aecaba2e678f4f28891a46e5f12723b3-0-d395115fcbe90532522cd68d3246fd0b" alt="VB247 Logo" class="logo-img mb-4">
   <div class="flex items-end gap-3 mb-5 w-full max-w-5xl">
-    <h2 class="font-display text-2xl font-bold text-white">July 6, 2026</h2>
-    <span class="text-xs text-slate-500 mb-1">Monday · 139 transfers / 8,656 calls</span>
+    <h2 class="font-display text-2xl font-bold text-white" id="day1-title">July 6, 2026</h2>
+    <span class="text-xs text-slate-500 mb-1" id="day1-sub">Monday · 139 transfers / 8,656 calls</span>
   </div>
   <div class="grid grid-cols-3 gap-3 w-full max-w-5xl text-sm" id="agents-jul6"></div>
 </div>
@@ -117,8 +136,8 @@ tailwind.config = {
 <div class="slide" id="slide-3">
   <img src="https://z-cdn-media.chatglm.cn/files/84d639c7-03b2-4a60-b8c7-72a651208e51.png?auth_key=1883804402-aecaba2e678f4f28891a46e5f12723b3-0-d395115fcbe90532522cd68d3246fd0b" alt="VB247 Logo" class="logo-img mb-4">
   <div class="flex items-end gap-3 mb-5 w-full max-w-5xl">
-    <h2 class="font-display text-2xl font-bold text-white">July 7, 2026</h2>
-    <span class="text-xs text-slate-500 mb-1">Tuesday · 69 transfers / 7,448 calls</span>
+    <h2 class="font-display text-2xl font-bold text-white" id="day2-title">July 7, 2026</h2>
+    <span class="text-xs text-slate-500 mb-1" id="day2-sub">Tuesday · 69 transfers / 7,448 calls</span>
   </div>
   <div class="grid grid-cols-3 gap-3 w-full max-w-5xl text-sm" id="agents-jul7"></div>
 </div>
@@ -127,8 +146,8 @@ tailwind.config = {
 <div class="slide" id="slide-4">
   <img src="https://z-cdn-media.chatglm.cn/files/84d639c7-03b2-4a60-b8c7-72a651208e51.png?auth_key=1883804402-aecaba2e678f4f28891a46e5f12723b3-0-d395115fcbe90532522cd68d3246fd0b" alt="VB247 Logo" class="logo-img mb-4">
   <div class="flex items-end gap-3 mb-5 w-full max-w-5xl">
-    <h2 class="font-display text-2xl font-bold text-white">July 8, 2026</h2>
-    <span class="text-xs text-slate-500 mb-1">Wednesday · 112 transfers / 7,651 calls</span>
+    <h2 class="font-display text-2xl font-bold text-white" id="day3-title">July 8, 2026</h2>
+    <span class="text-xs text-slate-500 mb-1" id="day3-sub">Wednesday · 112 transfers / 7,651 calls</span>
   </div>
   <div class="grid grid-cols-3 gap-3 w-full max-w-5xl text-sm" id="agents-jul8"></div>
 </div>
@@ -137,8 +156,8 @@ tailwind.config = {
 <div class="slide" id="slide-5">
   <img src="https://z-cdn-media.chatglm.cn/files/84d639c7-03b2-4a60-b8c7-72a651208e51.png?auth_key=1883804402-aecaba2e678f4f28891a46e5f12723b3-0-d395115fcbe90532522cd68d3246fd0b" alt="VB247 Logo" class="logo-img mb-4">
   <div class="flex items-end gap-3 mb-5 w-full max-w-5xl">
-    <h2 class="font-display text-2xl font-bold text-white">July 9, 2026</h2>
-    <span class="text-xs text-slate-500 mb-1">Thursday · 126 transfers / 8,629 calls</span>
+    <h2 class="font-display text-2xl font-bold text-white" id="day4-title">July 9, 2026</h2>
+    <span class="text-xs text-slate-500 mb-1" id="day4-sub">Thursday · 126 transfers / 8,629 calls</span>
   </div>
   <div class="grid grid-cols-3 gap-3 w-full max-w-5xl text-sm" id="agents-jul9"></div>
 </div>
@@ -147,8 +166,8 @@ tailwind.config = {
 <div class="slide" id="slide-6">
   <img src="https://z-cdn-media.chatglm.cn/files/84d639c7-03b2-4a60-b8c7-72a651208e51.png?auth_key=1883804402-aecaba2e678f4f28891a46e5f12723b3-0-d395115fcbe90532522cd68d3246fd0b" alt="VB247 Logo" class="logo-img mb-4">
   <div class="flex items-end gap-3 mb-5 w-full max-w-5xl">
-    <h2 class="font-display text-2xl font-bold text-white">July 10, 2026</h2>
-    <span class="text-xs text-slate-500 mb-1">Friday · 111 transfers / 7,933 calls</span>
+    <h2 class="font-display text-2xl font-bold text-white" id="day5-title">July 10, 2026</h2>
+    <span class="text-xs text-slate-500 mb-1" id="day5-sub">Friday · 111 transfers / 7,933 calls</span>
   </div>
   <div class="grid grid-cols-3 gap-3 w-full max-w-5xl text-sm" id="agents-jul10"></div>
 </div>
@@ -157,7 +176,7 @@ tailwind.config = {
 <div class="slide" id="slide-7">
   <img src="https://z-cdn-media.chatglm.cn/files/84d639c7-03b2-4a60-b8c7-72a651208e51.png?auth_key=1883804402-aecaba2e678f4f28891a46e5f12723b3-0-d395115fcbe90532522cd68d3246fd0b" alt="VB247 Logo" class="logo-img mb-5">
   <h2 class="font-display text-2xl font-bold text-white mb-1">Weekly Agent Ranking — Top Performers</h2>
-  <p class="text-slate-500 text-sm mb-8">Highest total transfers across July 6–10, 2026</p>
+  <p class="text-slate-500 text-sm mb-8" id="top-performers-sub">Highest total transfers across the week</p>
   <div class="w-full max-w-4xl space-y-4" id="top-performers"></div>
 </div>
 
@@ -165,7 +184,7 @@ tailwind.config = {
 <div class="slide" id="slide-8">
   <img src="https://z-cdn-media.chatglm.cn/files/84d639c7-03b2-4a60-b8c7-72a651208e51.png?auth_key=1883804402-aecaba2e678f4f28891a46e5f12723b3-0-d395115fcbe90532522cd68d3246fd0b" alt="VB247 Logo" class="logo-img mb-5">
   <h2 class="font-display text-2xl font-bold text-white mb-1">Weekly Agent Ranking — Bottom 6</h2>
-  <p class="text-slate-500 text-sm mb-8">Lowest total transfers across July 6–10, 2026</p>
+  <p class="text-slate-500 text-sm mb-8" id="bottom-performers-sub">Lowest total transfers across the week</p>
   <div class="w-full max-w-4xl space-y-4" id="bottom-performers"></div>
 </div>
 
@@ -181,7 +200,7 @@ tailwind.config = {
 <div class="slide" id="slide-10">
   <img src="https://z-cdn-media.chatglm.cn/files/84d639c7-03b2-4a60-b8c7-72a651208e51.png?auth_key=1883804402-aecaba2e678f4f28891a46e5f12723b3-0-d395115fcbe90532522cd68d3246fd0b" alt="VB247 Logo" class="logo-img mb-5">
   <h2 class="font-display text-2xl font-bold text-white mb-1">Weekly Call Disposition Breakdown</h2>
-  <p class="text-slate-500 text-sm mb-6">All 40,317 calls categorized · July 6–10, 2026</p>
+  <p class="text-slate-500 text-sm mb-6" id="disposition-sub">All calls categorized for the week</p>
   <div class="flex gap-8 items-start w-full max-w-5xl">
     <div class="chart-container" style="width:370px;height:370px"><canvas id="chart-disposition-pie"></canvas></div>
     <div class="flex-1 space-y-2 text-sm" id="disposition-legend"></div>
@@ -192,7 +211,7 @@ tailwind.config = {
 <div class="slide" id="slide-11">
   <img src="https://z-cdn-media.chatglm.cn/files/84d639c7-03b2-4a60-b8c7-72a651208e51.png?auth_key=1883804402-aecaba2e678f4f28891a46e5f12723b3-0-d395115fcbe90532522cd68d3246fd0b" alt="VB247 Logo" class="logo-img mb-5">
   <h2 class="font-display text-2xl font-bold text-white mb-1">Client Hang Up — Per Agent Breakdown</h2>
-  <p class="text-slate-500 text-sm mb-6">Weekly total per agent · Sorted highest to lowest · 16,704 total hang-ups (41.3% of all calls)</p>
+  <p class="text-slate-500 text-sm mb-6" id="hangup-sub">Weekly total per agent · Sorted highest to lowest</p>
   <div class="chart-container max-w-5xl" style="height:520px"><canvas id="chart-agent-hangup"></canvas></div>
 </div>
 
@@ -200,8 +219,9 @@ tailwind.config = {
 <div class="slide" id="slide-12">
   <img src="https://z-cdn-media.chatglm.cn/files/84d639c7-03b2-4a60-b8c7-72a651208e51.png?auth_key=1883804402-aecaba2e678f4f28891a46e5f12723b3-0-d395115fcbe90532522cd68d3246fd0b" alt="VB247 Logo" class="logo-img mb-5">
   <h2 class="font-display text-2xl font-bold text-white mb-1">Recommendations & Action Items</h2>
-  <p class="text-slate-500 text-sm mb-5">Strategies to improve transfer rates across the team</p>
-  <div class="w-full max-w-5xl space-y-3 text-sm">
+  <p class="text-slate-500 text-sm mb-5">Strategies based on this week's actual data</p>
+  <div class="w-full max-w-5xl space-y-3 text-sm" id="recommendations-container">
+    <!-- Filled automatically by JavaScript -->
     <div class="rec-card urgent">
       <p class="text-white font-semibold mb-1">1. Reduce Client Hang-Ups (41.3% of all calls — #1 issue)</p>
       <p class="text-slate-400 leading-relaxed">With 16,704 hang-ups out of 40K+ calls, this is the single biggest leak. Train agents on a stronger opening hook within the first 5 seconds. Role-play scenarios where clients immediately want to hang up. Consider A/B testing different opening scripts.</p>
@@ -216,7 +236,7 @@ tailwind.config = {
     </div>
     <div class="rec-card medium">
       <p class="text-white font-semibold mb-1">4. Coaching for Bottom 6 Agents</p>
-      <p class="text-slate-400 leading-relaxed">Lovel Jane Baros (26), Donita Conde (27), Jolever Cabrera (30), Jovelyn Cortes (30), Jonathan Mario (35), Mary Napigquit (37) — Pair each with a top performer (Aubrey 57, Dulsel 48, Norina 49) for side-by-side shadowing sessions.</p>
+      <p class="text-slate-400 leading-relaxed">Lovel Jane Baros (26), Donita Conde (27), Jolever Cabrera (30), Jovelyn Cortes (30), Jonathan Mario (35), Mary Napigquit (37) — Pair each with a top performer for side-by-side shadowing sessions.</p>
     </div>
     <div class="rec-card good">
       <p class="text-white font-semibold mb-1">5. Replicate Top Performer Patterns</p>
@@ -230,66 +250,330 @@ tailwind.config = {
 </div>
 
 <script>
+// ================================================================
+// SHEET ID — REPLACE THIS WITH YOUR REAL GOOGLE SHEET ID
+// ================================================================
+var SHEET_ID = '19_f2MD06Tu1EfbuddPBC3euuc76PuJB1Awqi2uigfX0';
+
+// ================================================================
+// ARCHIVE + DROPDOWN SYSTEM
+// ================================================================
+var ALL_WEEKS_CACHE = {};
+
+async function loadArchive() {
+  var selector = document.getElementById('weekSelector');
+  try {
+    var url = 'https://docs.google.com/spreadsheets/d/'
+      + SHEET_ID
+      + '/gviz/tq?tqx=out:json&sheet=WeekIndex';
+    var res  = await fetch(url);
+    var text = await res.text();
+    var json = JSON.parse(text.substring(47, text.length - 2));
+
+    if (!json.table || !json.table.rows || !json.table.rows.length) {
+      selector.innerHTML = '<option value="2026-07-06">Jul 6 - 10, 2026 (Current)</option>';
+      initWithDefaultData();
+      return;
+    }
+
+    selector.innerHTML = '';
+    json.table.rows.forEach(function(row, i) {
+      if (!row.c || !row.c[0]) return;
+      var ws  = row.c[0].v;
+      var lbl = row.c[1] ? row.c[1].v : ws;
+      var opt = document.createElement('option');
+      opt.value = ws;
+      opt.text  = i === 0 ? 'Latest: ' + lbl : lbl;
+      if (i === 0) opt.selected = true;
+      selector.appendChild(opt);
+    });
+
+    var latest = json.table.rows[0].c[0].v;
+    loadWeek(latest);
+
+  } catch(e) {
+    console.log('Archive load error:', e);
+    selector.innerHTML = '<option value="2026-07-06">Jul 6 - 10, 2026</option>';
+    initWithDefaultData();
+  }
+}
+
+async function loadWeek(weekStartDate) {
+  var selector = document.getElementById('weekSelector');
+  selector.style.opacity = '0.5';
+  selector.disabled = true;
+  try {
+    if (ALL_WEEKS_CACHE[weekStartDate]) {
+      applyWeekData(ALL_WEEKS_CACHE[weekStartDate]);
+      selector.style.opacity = '1';
+      selector.disabled = false;
+      return;
+    }
+    var url = 'https://docs.google.com/spreadsheets/d/'
+      + SHEET_ID
+      + '/gviz/tq?tqx=out:json&sheet=Output';
+    var res  = await fetch(url);
+    var text = await res.text();
+    var json = JSON.parse(text.substring(47, text.length - 2));
+    var found = null;
+    if (json.table && json.table.rows) {
+      json.table.rows.forEach(function(row) {
+        if (!row.c || !row.c[0]) return;
+        if (row.c[0].v === weekStartDate && row.c[2]) {
+          try { found = JSON.parse(row.c[2].v); } catch(e) {}
+        }
+      });
+    }
+    if (found) {
+      ALL_WEEKS_CACHE[weekStartDate] = found;
+      applyWeekData(found);
+    } else {
+      initWithDefaultData();
+    }
+  } catch(e) {
+    console.log('Week load error:', e);
+    initWithDefaultData();
+  }
+  selector.style.opacity = '1';
+  selector.disabled = false;
+}
+
+function applyWeekData(data) {
+  // Update global data variables
+  dailyData = (data.days || []).map(function(d) {
+    return {
+      date:      d.date,
+      day:       d.day,
+      transfers: d.totalTransfers,
+      calls:     d.totalCalls,
+      rate:      d.totalCalls > 0
+        ? ((d.totalTransfers / d.totalCalls) * 100).toFixed(2)
+        : '0.00',
+      agents: d.agents || []
+    };
+  });
+  weeklyDispositions = data.dispositions || {};
+
+  // Update title slide
+  var titleWeek = document.getElementById('title-week-label');
+  if (titleWeek) titleWeek.textContent = data.weekLabel || '';
+  document.getElementById('stat-total-calls').textContent =
+    Number(data.totalCalls).toLocaleString();
+  document.getElementById('stat-total-transfers').textContent =
+    data.totalTransfers;
+  document.getElementById('stat-transfer-rate').textContent =
+    data.transferRate + '%';
+  document.title = 'VB247 Med Supp 2.0 | ' + (data.weekLabel || '');
+
+  // Update day slide headers
+  var dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  dailyData.forEach(function(d, i) {
+    var titleEl = document.getElementById('day' + (i+1) + '-title');
+    var subEl   = document.getElementById('day' + (i+1) + '-sub');
+    if (titleEl) titleEl.textContent = d.date;
+    if (subEl)   subEl.textContent   =
+      d.day + ' · ' + d.transfers + ' transfers / ' +
+      Number(d.calls).toLocaleString() + ' calls';
+  });
+
+  // Update subtitle labels
+  var topSub = document.getElementById('top-performers-sub');
+  var botSub = document.getElementById('bottom-performers-sub');
+  if (topSub) topSub.textContent =
+    'Highest total transfers across ' + (data.weekLabel || 'the week');
+  if (botSub) botSub.textContent =
+    'Lowest total transfers across ' + (data.weekLabel || 'the week');
+
+  var dispSub = document.getElementById('disposition-sub');
+  if (dispSub) dispSub.textContent =
+    'All ' + Number(data.totalCalls).toLocaleString() +
+    ' calls categorized · ' + (data.weekLabel || '');
+
+  var huSub = document.getElementById('hangup-sub');
+  var totalHU = data.dispositions['Client Hang Up'] || 0;
+  var huPct = data.totalCalls > 0
+    ? ((totalHU / data.totalCalls) * 100).toFixed(1) : '0.0';
+  if (huSub) huSub.textContent =
+    'Weekly total per agent · Sorted highest to lowest · ' +
+    totalHU.toLocaleString() + ' total hang-ups (' + huPct + '% of all calls)';
+
+  // Destroy existing charts
+  Object.values(Chart.instances || {}).forEach(function(c) {
+    try { c.destroy(); } catch(e) {}
+  });
+
+  // Recalculate agent totals
+  rebuildAgentTotals();
+
+  // Render agent cards
+  var agentContainers = ['agents-jul6','agents-jul7','agents-jul8',
+                         'agents-jul9','agents-jul10','agents-sat'];
+  dailyData.forEach(function(d, i) {
+    if (agentContainers[i]) renderAgentCards(agentContainers[i], d.agents);
+  });
+
+  // Rebuild performer lists
+  buildTopPerformers();
+  buildBottomPerformers();
+
+  // Rebuild recommendations
+  if (data.recommendations && data.recommendations.length) {
+    renderRecommendations(data.recommendations);
+  }
+
+  // Rebuild all charts
+  buildAllCharts();
+}
+
+function rebuildAgentTotals() {
+  agentTotals = {};
+  dailyData.forEach(function(d) {
+    (d.agents || []).forEach(function(a) {
+      if (!agentTotals[a.name]) agentTotals[a.name] = {
+        name: a.name, total: 0, days: 0,
+        daily: [], huTotal: 0, huDaily: []
+      };
+      agentTotals[a.name].total   += a.t;
+      agentTotals[a.name].days++;
+      agentTotals[a.name].daily.push({ date: d.date, t: a.t });
+      agentTotals[a.name].huTotal += (a.hu || 0);
+      agentTotals[a.name].huDaily.push({ date: d.date, hu: a.hu || 0 });
+    });
+  });
+  sortedAgents   = Object.values(agentTotals).sort(function(a,b) {
+    return b.total - a.total;
+  });
+  top5           = sortedAgents.slice(0, 5);
+  bottom6        = sortedAgents.slice(-6).reverse();
+  sortedByHangUp = Object.values(agentTotals).sort(function(a,b) {
+    return b.huTotal - a.huTotal;
+  });
+}
+
+function renderRecommendations(recs) {
+  var container = document.getElementById('recommendations-container');
+  if (!container || !recs || !recs.length) return;
+  var html = '';
+  recs.forEach(function(rec) {
+    var borderColor =
+      rec.priority === 'urgent' ? '#ef4444' :
+      rec.priority === 'good'   ? '#22c55e' : '#f59e0b';
+    var badgeStyle =
+      rec.priority === 'urgent'
+        ? 'background:rgba(239,68,68,0.15);color:#f87171'
+        : rec.priority === 'good'
+        ? 'background:rgba(34,197,94,0.15);color:#4ade80'
+        : 'background:rgba(245,158,11,0.15);color:#fbbf24';
+    var badgeText =
+      rec.priority === 'urgent' ? 'URGENT' :
+      rec.priority === 'good'   ? 'POSITIVE' : 'ACTION NEEDED';
+    html +=
+      '<div style="background:rgba(255,255,255,0.03);' +
+        'border:1px solid rgba(255,255,255,0.08);' +
+        'border-left:3px solid ' + borderColor + ';' +
+        'border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:0.5rem;">' +
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">' +
+          '<p style="color:#fff;font-weight:600;font-size:0.875rem;flex:1;">' +
+            rec.title + '</p>' +
+          '<span style="' + badgeStyle + ';font-size:0.6rem;' +
+            'padding:2px 8px;border-radius:99px;font-weight:700;' +
+            'white-space:nowrap;">' + badgeText + '</span>' +
+        '</div>' +
+        '<p style="color:#94a3b8;font-size:0.8rem;line-height:1.6;">' +
+          rec.body + '</p>' +
+      '</div>';
+  });
+  container.innerHTML = html;
+}
+
+// ================================================================
+// DEFAULT DATA (Jul 6-10 fallback while Google Sheet loads)
+// ================================================================
 var dailyData = [
   { date:'Jul 6', day:'Mon', transfers:139, calls:8656, rate:1.61, agents: [
-    {name:'Lovel Jane Baros',t:8,hu:282},{name:'Aubrey Rose Javier',t:12,hu:280},{name:'Nichime Miro',t:7,hu:211},{name:'Mary Napigquit',t:8,hu:197},
-    {name:'Vergilio Pactol',t:10,hu:206},{name:'Welver Gomera',t:7,hu:245},{name:'Donita Conde',t:0,hu:0},{name:'Shara Jane Cabrera',t:11,hu:221},
-    {name:'Aiza Ontolan',t:7,hu:355},{name:'Errol Jake Sorezo',t:0,hu:0},{name:'Jolever Cabrera',t:10,hu:215},{name:'Norina Mimis',t:11,hu:290},
-    {name:'Jovelyn Cortes',t:6,hu:289},{name:'Jonathan Mario',t:10,hu:232},{name:'Dulsel Abian',t:12,hu:248}
+    {name:'Lovel Jane Baros',t:8,hu:282},{name:'Aubrey Rose Javier',t:12,hu:280},
+    {name:'Nichime Miro',t:7,hu:211},{name:'Mary Napigquit',t:8,hu:197},
+    {name:'Vergilio Pactol',t:10,hu:206},{name:'Welver Gomera',t:7,hu:245},
+    {name:'Donita Conde',t:0,hu:0},{name:'Shara Jane Cabrera',t:11,hu:221},
+    {name:'Aiza Ontolan',t:7,hu:355},{name:'Errol Jake Sorezo',t:0,hu:0},
+    {name:'Jolever Cabrera',t:10,hu:215},{name:'Norina Mimis',t:11,hu:290},
+    {name:'Jovelyn Cortes',t:6,hu:289},{name:'Jonathan Mario',t:10,hu:232},
+    {name:'Dulsel Abian',t:12,hu:248}
   ]},
   { date:'Jul 7', day:'Tue', transfers:69, calls:7448, rate:0.93, agents: [
-    {name:'Lovel Jane Baros',t:1,hu:225},{name:'Aubrey Rose Javier',t:7,hu:253},{name:'Nichime Miro',t:6,hu:220},{name:'Mary Napigquit',t:2,hu:100},
-    {name:'Vergilio Pactol',t:4,hu:168},{name:'Welver Gomera',t:7,hu:156},{name:'Donita Conde',t:2,hu:227},{name:'Shara Jane Cabrera',t:7,hu:178},
-    {name:'Aiza Ontolan',t:6,hu:270},{name:'Errol Jake Sorezo',t:4,hu:190},{name:'Jolever Cabrera',t:2,hu:211},{name:'Norina Mimis',t:5,hu:282},
-    {name:'Jovelyn Cortes',t:5,hu:275},{name:'Jonathan Mario',t:5,hu:201},{name:'Dulsel Abian',t:6,hu:187}
+    {name:'Lovel Jane Baros',t:1,hu:225},{name:'Aubrey Rose Javier',t:7,hu:253},
+    {name:'Nichime Miro',t:6,hu:220},{name:'Mary Napigquit',t:2,hu:100},
+    {name:'Vergilio Pactol',t:4,hu:168},{name:'Welver Gomera',t:7,hu:156},
+    {name:'Donita Conde',t:2,hu:227},{name:'Shara Jane Cabrera',t:7,hu:178},
+    {name:'Aiza Ontolan',t:6,hu:270},{name:'Errol Jake Sorezo',t:4,hu:190},
+    {name:'Jolever Cabrera',t:2,hu:211},{name:'Norina Mimis',t:5,hu:282},
+    {name:'Jovelyn Cortes',t:5,hu:275},{name:'Jonathan Mario',t:5,hu:201},
+    {name:'Dulsel Abian',t:6,hu:187}
   ]},
   { date:'Jul 8', day:'Wed', transfers:112, calls:7651, rate:1.46, agents: [
-    {name:'Lovel Jane Baros',t:6,hu:227},{name:'Aubrey Rose Javier',t:13,hu:259},{name:'Nichime Miro',t:9,hu:198},{name:'Mary Napigquit',t:6,hu:173},
-    {name:'Vergilio Pactol',t:0,hu:0},{name:'Welver Gomera',t:9,hu:205},{name:'Donita Conde',t:6,hu:225},{name:'Shara Jane Cabrera',t:7,hu:217},
-    {name:'Aiza Ontolan',t:6,hu:330},{name:'Errol Jake Sorezo',t:7,hu:215},{name:'Jolever Cabrera',t:10,hu:211},{name:'Norina Mimis',t:11,hu:242},
-    {name:'Jovelyn Cortes',t:8,hu:285},{name:'Jonathan Mario',t:6,hu:235},{name:'Dulsel Abian',t:8,hu:215}
+    {name:'Lovel Jane Baros',t:6,hu:227},{name:'Aubrey Rose Javier',t:13,hu:259},
+    {name:'Nichime Miro',t:9,hu:198},{name:'Mary Napigquit',t:6,hu:173},
+    {name:'Vergilio Pactol',t:0,hu:0},{name:'Welver Gomera',t:9,hu:205},
+    {name:'Donita Conde',t:6,hu:225},{name:'Shara Jane Cabrera',t:7,hu:217},
+    {name:'Aiza Ontolan',t:6,hu:330},{name:'Errol Jake Sorezo',t:7,hu:215},
+    {name:'Jolever Cabrera',t:10,hu:211},{name:'Norina Mimis',t:11,hu:242},
+    {name:'Jovelyn Cortes',t:8,hu:285},{name:'Jonathan Mario',t:6,hu:235},
+    {name:'Dulsel Abian',t:8,hu:215}
   ]},
   { date:'Jul 9', day:'Thu', transfers:126, calls:8629, rate:1.46, agents: [
-    {name:'Lovel Jane Baros',t:10,hu:189},{name:'Aubrey Rose Javier',t:16,hu:223},{name:'Nichime Miro',t:7,hu:171},{name:'Mary Napigquit',t:9,hu:176},
-    {name:'Vergilio Pactol',t:11,hu:220},{name:'Welver Gomera',t:4,hu:195},{name:'Donita Conde',t:5,hu:281},{name:'Shara Jane Cabrera',t:7,hu:197},
-    {name:'Aiza Ontolan',t:10,hu:298},{name:'Errol Jake Sorezo',t:8,hu:246},{name:'Jolever Cabrera',t:5,hu:186},{name:'Norina Mimis',t:12,hu:236},
-    {name:'Jovelyn Cortes',t:4,hu:293},{name:'Jonathan Mario',t:6,hu:232},{name:'Dulsel Abian',t:12,hu:231}
+    {name:'Lovel Jane Baros',t:10,hu:189},{name:'Aubrey Rose Javier',t:16,hu:223},
+    {name:'Nichime Miro',t:7,hu:171},{name:'Mary Napigquit',t:9,hu:176},
+    {name:'Vergilio Pactol',t:11,hu:220},{name:'Welver Gomera',t:4,hu:195},
+    {name:'Donita Conde',t:5,hu:281},{name:'Shara Jane Cabrera',t:7,hu:197},
+    {name:'Aiza Ontolan',t:10,hu:298},{name:'Errol Jake Sorezo',t:8,hu:246},
+    {name:'Jolever Cabrera',t:5,hu:186},{name:'Norina Mimis',t:12,hu:236},
+    {name:'Jovelyn Cortes',t:4,hu:293},{name:'Jonathan Mario',t:6,hu:232},
+    {name:'Dulsel Abian',t:12,hu:231}
   ]},
   { date:'Jul 10', day:'Fri', transfers:111, calls:7933, rate:1.40, agents: [
-    {name:'Lovel Jane Baros',t:6,hu:207},{name:'Aubrey Rose Javier',t:9,hu:279},{name:'Nichime Miro',t:8,hu:134},{name:'Mary Napigquit',t:7,hu:198},
-    {name:'Vergilio Pactol',t:7,hu:179},{name:'Welver Gomera',t:7,hu:192},{name:'Donita Conde',t:7,hu:210},{name:'Shara Jane Cabrera',t:5,hu:177},
-    {name:'Aiza Ontolan',t:9,hu:244},{name:'Errol Jake Sorezo',t:7,hu:235},{name:'Jolever Cabrera',t:3,hu:207},{name:'Norina Mimis',t:12,hu:249},
-    {name:'Jovelyn Cortes',t:7,hu:246},{name:'Jonathan Mario',t:7,hu:241},{name:'Dulsel Abian',t:10,hu:200}
+    {name:'Lovel Jane Baros',t:6,hu:207},{name:'Aubrey Rose Javier',t:9,hu:279},
+    {name:'Nichime Miro',t:8,hu:134},{name:'Mary Napigquit',t:7,hu:198},
+    {name:'Vergilio Pactol',t:7,hu:179},{name:'Welver Gomera',t:7,hu:192},
+    {name:'Donita Conde',t:7,hu:210},{name:'Shara Jane Cabrera',t:5,hu:177},
+    {name:'Aiza Ontolan',t:9,hu:244},{name:'Errol Jake Sorezo',t:7,hu:235},
+    {name:'Jolever Cabrera',t:3,hu:207},{name:'Norina Mimis',t:12,hu:249},
+    {name:'Jovelyn Cortes',t:7,hu:246},{name:'Jonathan Mario',t:7,hu:241},
+    {name:'Dulsel Abian',t:10,hu:200}
   ]}
 ];
 
 var weeklyDispositions = {
-  'Successful Transfer': 557, 'Client Hang Up': 16704, 'Answering Machine': 11513,
-  'Dead Air': 5806, 'Not Interested': 1435, 'Do Not Call': 1397, 'Client Has Medicaid': 1454,
-  'Call Back': 169, 'Client Hang Up During Transfer': 221, 'No Transfer Agent Available': 147,
-  'Deceased': 3, 'Does Not Make Healthcare Decision': 14, 'Not Between 50-85': 9,
-  'Existing Client': 1, 'Nursing Home': 3, 'Not Available': 1
+  'Successful Transfer':557,'Client Hang Up':16704,'Answering Machine':11513,
+  'Dead Air':5806,'Not Interested':1435,'Do Not Call':1397,
+  'Client Has Medicaid':1454,'Call Back':169,
+  'Client Hang Up During Transfer':221,'No Transfer Agent Available':147,
+  'Deceased':3,'Does Not Make Healthcare Decision':14,
+  'Not Between 50-85':9,'Existing Client':1,'Nursing Home':3,'Not Available':1
 };
 
+// ================================================================
+// AGENT TOTALS — calculated from dailyData
+// ================================================================
 var agentTotals = {};
-dailyData.forEach(function(d) {
-  d.agents.forEach(function(a) {
-    var key = a.name;
-    if (!agentTotals[key]) agentTotals[key] = { name: key, total: 0, days: 0, daily: [], huTotal: 0, huDaily: [] };
-    agentTotals[key].total += a.t;
-    agentTotals[key].days++;
-    agentTotals[key].daily.push({ date: d.date, t: a.t });
-    agentTotals[key].huTotal += (a.hu || 0);
-    agentTotals[key].huDaily.push({ date: d.date, hu: a.hu || 0 });
-  });
-});
-var sortedAgents = Object.values(agentTotals).sort(function(a, b) { return b.total - a.total; });
-var top5 = sortedAgents.slice(0, 5);
-var bottom6 = sortedAgents.slice(-6).reverse();
-var sortedByHangUp = Object.values(agentTotals).sort(function(a, b) { return b.huTotal - a.huTotal; });
+var sortedAgents, top5, bottom6, sortedByHangUp;
 
+function initWithDefaultData() {
+  rebuildAgentTotals();
+  renderAgentCards('agents-jul6',  dailyData[0].agents);
+  renderAgentCards('agents-jul7',  dailyData[1].agents);
+  renderAgentCards('agents-jul8',  dailyData[2].agents);
+  renderAgentCards('agents-jul9',  dailyData[3].agents);
+  renderAgentCards('agents-jul10', dailyData[4].agents);
+  buildTopPerformers();
+  buildBottomPerformers();
+  buildAllCharts();
+}
+
+// ================================================================
+// NAVIGATION
+// ================================================================
 var currentSlide = 0;
-var totalSlides = 13;
+var totalSlides  = 13;
 
 function changeSlide(dir) {
   var next = currentSlide + dir;
@@ -299,20 +583,21 @@ function changeSlide(dir) {
   document.getElementById('slide-' + currentSlide).classList.add('active');
   updateNav();
 }
-
 function goToSlide(i) {
   document.getElementById('slide-' + currentSlide).classList.remove('active');
   currentSlide = i;
   document.getElementById('slide-' + currentSlide).classList.add('active');
   updateNav();
 }
-
 function updateNav() {
   document.getElementById('prevBtn').disabled = currentSlide === 0;
   document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-  document.getElementById('slideCounter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
+  document.getElementById('slideCounter').textContent =
+    (currentSlide + 1) + ' / ' + totalSlides;
   var dots = document.querySelectorAll('.dot-nav span');
-  for (var i = 0; i < dots.length; i++) { dots[i].classList.toggle('active', i === currentSlide); }
+  for (var i = 0; i < dots.length; i++) {
+    dots[i].classList.toggle('active', i === currentSlide);
+  }
 }
 
 var dotNav = document.getElementById('dotNav');
@@ -323,286 +608,366 @@ for (var i = 0; i < totalSlides; i++) {
     dotNav.appendChild(dot);
   })(i);
 }
-
 document.addEventListener('keydown', function(e) {
   if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
-  if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+  if (e.key === 'ArrowLeft')  { e.preventDefault(); changeSlide(-1); }
 });
 
-Chart.defaults.color = '#94a3b8';
-Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
-Chart.defaults.font.family = 'Inter';
-Chart.defaults.font.size = 11;
+// ================================================================
+// CHART DEFAULTS
+// ================================================================
+Chart.defaults.color          = '#94a3b8';
+Chart.defaults.borderColor    = 'rgba(255,255,255,0.06)';
+Chart.defaults.font.family    = 'Inter';
+Chart.defaults.font.size      = 11;
 Chart.defaults.plugins.legend.display = false;
 
-// SLIDE 2: GOAL COMPLIANCE AS BAR CHART WITH DASHED GOAL LINE AND VISIBLE TOTALS
-new Chart(document.getElementById('chart-goal-compliance'), {
-  type: 'bar',
-  data: {
-    labels: ['Jul 6 (Mon)', 'Jul 7 (Tue)', 'Jul 8 (Wed)', 'Jul 9 (Thu)', 'Jul 10 (Fri)'],
-    datasets: [{
-      label: 'Transfers',
-      data: [139, 69, 112, 126, 111],
-      backgroundColor: 'rgba(59,130,246,0.6)',
-      borderColor: '#3b82f6',
-      borderWidth: 1.5,
-      borderRadius: 6,
-      barPercentage: 0.6
-    }]
-  },
-  options: {
-    responsive: true, 
-    maintainAspectRatio: false,
-    scales: {
-      y: { beginAtZero: true, max: 180, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { stepSize: 30 } },
-      x: { grid: { display: false }, ticks: { font: { size: 12, weight: '500' }, color: '#94a3b8' } }
-    },
-    plugins: {
-      tooltip: { 
-        enabled: true, 
-        callbacks: { 
-          label: function(ctx) { return ctx.raw + ' transfers'; }, 
-          afterLabel: function(ctx) { var diff = ctx.raw - 150; return diff >= 0 ? 'Above goal by ' + diff : 'Below goal by ' + Math.abs(diff); } 
-        } 
-      }
-    },
-    layout: { padding: { top: 20 } }
-  },
-  plugins: [
-    {
-      id: 'goalLinePlugin', 
-      afterDraw: function(chart) {
-        var y = chart.scales.y.getPixelForValue(150); 
-        var ctx = chart.ctx; 
-        ctx.save();
-        ctx.setLineDash([8, 5]); 
-        ctx.strokeStyle = '#f59e0b'; 
-        ctx.lineWidth = 2;
-        ctx.beginPath(); 
-        ctx.moveTo(chart.chartArea.left, y); 
-        ctx.lineTo(chart.chartArea.right, y); 
-        ctx.stroke();
-        ctx.setLineDash([]); 
-        ctx.fillStyle = '#f59e0b'; 
-        ctx.font = '700 11px Inter'; 
-        ctx.textAlign = 'right';
-        ctx.fillText('GOAL: 150', chart.chartArea.right, y - 8); 
-        ctx.restore();
-      }
-    },
-    {
-      id: 'barTotals',
-      afterDatasetsDraw: function(chart) {
-        var ctx = chart.ctx;
-        ctx.save();
-        ctx.font = '700 13px Inter';
-        ctx.fillStyle = '#ffffff';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        
-        var meta = chart.getDatasetMeta(0);
-        meta.data.forEach(function(bar, index) {
-          var dataValue = bar.$context.raw;
-          ctx.fillText(dataValue, bar.x, bar.y - 6);
-        });
-        ctx.restore();
-      }
-    }
-  ]
-});
-
+// ================================================================
+// RENDER AGENT CARDS
+// ================================================================
 function renderAgentCards(containerId, agents) {
   var container = document.getElementById(containerId);
-  var sorted = agents.slice().sort(function(a, b) { return b.t - a.t; });
+  if (!container) return;
+  var sorted = (agents || []).slice().sort(function(a,b) { return b.t - a.t; });
   var maxT = Math.max.apply(null, sorted.map(function(a) { return a.t; }));
   if (maxT < 1) maxT = 1;
   var html = '';
   for (var i = 0; i < sorted.length; i++) {
     var a = sorted[i], pct = (a.t / maxT) * 100, tag, barColor;
-    if (a.t >= 10) { tag = '<span class="tag-top">MET</span>'; barColor = 'bg-emerald-500'; }
-    else if (a.t >= 7) { tag = '<span class="tag-mid">NEAR</span>'; barColor = 'bg-amber-500'; }
-    else { tag = '<span class="tag-bottom">LOW</span>'; barColor = 'bg-red-500'; }
-    html += '<div class="stat-card text-left" style="padding:0.8rem 1rem"><div class="flex items-center justify-between mb-2"><span class="text-white font-medium text-xs truncate" style="max-width:65%">' + a.name + '</span><span class="text-white font-bold text-sm">' + a.t + '</span></div><div class="w-full bg-white/5 rounded-full h-1.5 mb-2"><div class="' + barColor + ' h-1.5 rounded-full" style="width:' + pct + '%"></div></div><div class="flex items-center justify-between">' + tag + '<span class="text-slate-600 text-xs">#' + (i+1) + '</span></div></div>';
+    if (a.t >= 10)      { tag = '<span class="tag-top">MET</span>';  barColor = 'bg-emerald-500'; }
+    else if (a.t >= 7)  { tag = '<span class="tag-mid">NEAR</span>'; barColor = 'bg-amber-500'; }
+    else                { tag = '<span class="tag-bottom">LOW</span>'; barColor = 'bg-red-500'; }
+    html += '<div class="stat-card text-left" style="padding:0.8rem 1rem">' +
+      '<div class="flex items-center justify-between mb-2">' +
+        '<span class="text-white font-medium text-xs truncate" style="max-width:65%">' + a.name + '</span>' +
+        '<span class="text-white font-bold text-sm">' + a.t + '</span>' +
+      '</div>' +
+      '<div class="w-full bg-white/5 rounded-full h-1.5 mb-2">' +
+        '<div class="' + barColor + ' h-1.5 rounded-full" style="width:' + pct + '%"></div>' +
+      '</div>' +
+      '<div class="flex items-center justify-between">' + tag +
+        '<span class="text-slate-600 text-xs">#' + (i+1) + '</span>' +
+      '</div></div>';
   }
   container.innerHTML = html;
 }
-renderAgentCards('agents-jul6', dailyData[0].agents);
-renderAgentCards('agents-jul7', dailyData[1].agents);
-renderAgentCards('agents-jul8', dailyData[2].agents);
-renderAgentCards('agents-jul9', dailyData[3].agents);
-renderAgentCards('agents-jul10', dailyData[4].agents);
 
-var maxTop = top5[0].total, topHtml = '', medals = ['\u{1F947}','\u{1F948}','\u{1F949}'];
-for (var i = 0; i < top5.length; i++) {
-  var a = top5[i], pct = (a.total/maxTop)*100, avg = (a.total/a.days).toFixed(1), medal = i<3 ? medals[i] : '#'+(i+1);
-  var ds = a.daily.map(function(d){return d.date+': '+d.t;}).join(' · ');
-  topHtml += '<div class="stat-card flex items-center gap-4 text-left" style="padding:1rem 1.5rem"><span class="text-2xl w-10 text-center">'+medal+'</span><div class="flex-1"><div class="flex items-center gap-3 mb-1"><span class="text-white font-semibold">'+a.name+'</span><span class="tag-top">TOP</span></div><div class="w-full bg-white/5 rounded-full h-2 mb-1"><div class="bg-emerald-500 h-2 rounded-full" style="width:'+pct+'%"></div></div><p class="text-slate-500 text-xs">'+ds+'</p></div><div class="text-right"><p class="text-2xl font-bold text-white">'+a.total+'</p><p class="text-xs text-slate-500">Avg '+avg+'/day</p></div></div>';
+// ================================================================
+// TOP PERFORMERS
+// ================================================================
+function buildTopPerformers() {
+  if (!top5 || !top5.length) return;
+  var maxTop = top5[0].total;
+  var medals = ['\u{1F947}','\u{1F948}','\u{1F949}'];
+  var topHtml = '';
+  for (var i = 0; i < top5.length; i++) {
+    var a = top5[i];
+    var pct   = (a.total / maxTop) * 100;
+    var avg   = (a.total / a.days).toFixed(1);
+    var medal = i < 3 ? medals[i] : '#' + (i+1);
+    var ds    = a.daily.map(function(d) { return d.date + ': ' + d.t; }).join(' · ');
+    topHtml +=
+      '<div class="stat-card flex items-center gap-4 text-left" style="padding:1rem 1.5rem">' +
+        '<span class="text-2xl w-10 text-center">' + medal + '</span>' +
+        '<div class="flex-1">' +
+          '<div class="flex items-center gap-3 mb-1">' +
+            '<span class="text-white font-semibold">' + a.name + '</span>' +
+            '<span class="tag-top">TOP</span>' +
+          '</div>' +
+          '<div class="w-full bg-white/5 rounded-full h-2 mb-1">' +
+            '<div class="bg-emerald-500 h-2 rounded-full" style="width:' + pct + '%"></div>' +
+          '</div>' +
+          '<p class="text-slate-500 text-xs">' + ds + '</p>' +
+        '</div>' +
+        '<div class="text-right">' +
+          '<p class="text-2xl font-bold text-white">' + a.total + '</p>' +
+          '<p class="text-xs text-slate-500">Avg ' + avg + '/day</p>' +
+        '</div>' +
+      '</div>';
+  }
+  document.getElementById('top-performers').innerHTML = topHtml;
 }
-document.getElementById('top-performers').innerHTML = topHtml;
 
-var botHtml = '';
-for (var i = 0; i < bottom6.length; i++) {
-  var a = bottom6[i], pct = Math.max((a.total/50)*100,4), avg = (a.total/a.days).toFixed(1), gap = 50-a.total, rank = sortedAgents.indexOf(a)+1;
-  var ds = a.daily.map(function(d){return d.date+': '+d.t;}).join(' · ');
-  botHtml += '<div class="stat-card flex items-center gap-4 text-left" style="padding:1rem 1.5rem"><span class="text-2xl w-10 text-center">#'+rank+'</span><div class="flex-1"><div class="flex items-center gap-3 mb-1"><span class="text-white font-semibold">'+a.name+'</span><span class="tag-bottom">-'+gap+' from goal</span></div><div class="w-full bg-white/5 rounded-full h-2 mb-1"><div class="bg-red-500/70 h-2 rounded-full" style="width:'+pct+'%"></div></div><p class="text-slate-500 text-xs">'+ds+'</p></div><div class="text-right"><p class="text-2xl font-bold text-red-400">'+a.total+'</p><p class="text-xs text-slate-500">Avg '+avg+'/day</p></div></div>';
+// ================================================================
+// BOTTOM PERFORMERS
+// ================================================================
+function buildBottomPerformers() {
+  if (!bottom6 || !bottom6.length) return;
+  var botHtml = '';
+  for (var i = 0; i < bottom6.length; i++) {
+    var a    = bottom6[i];
+    var pct  = Math.max((a.total / 50) * 100, 4);
+    var avg  = (a.total / a.days).toFixed(1);
+    var gap  = 50 - a.total;
+    var rank = sortedAgents.indexOf(a) + 1;
+    var ds   = a.daily.map(function(d) { return d.date + ': ' + d.t; }).join(' · ');
+    botHtml +=
+      '<div class="stat-card flex items-center gap-4 text-left" style="padding:1rem 1.5rem">' +
+        '<span class="text-2xl w-10 text-center">#' + rank + '</span>' +
+        '<div class="flex-1">' +
+          '<div class="flex items-center gap-3 mb-1">' +
+            '<span class="text-white font-semibold">' + a.name + '</span>' +
+            '<span class="tag-bottom">-' + gap + ' from goal</span>' +
+          '</div>' +
+          '<div class="w-full bg-white/5 rounded-full h-2 mb-1">' +
+            '<div class="bg-red-500/70 h-2 rounded-full" style="width:' + pct + '%"></div>' +
+          '</div>' +
+          '<p class="text-slate-500 text-xs">' + ds + '</p>' +
+        '</div>' +
+        '<div class="text-right">' +
+          '<p class="text-2xl font-bold text-red-400">' + a.total + '</p>' +
+          '<p class="text-xs text-slate-500">Avg ' + avg + '/day</p>' +
+        '</div>' +
+      '</div>';
+  }
+  document.getElementById('bottom-performers').innerHTML = botHtml;
 }
-document.getElementById('bottom-performers').innerHTML = botHtml;
 
-// SLIDE 10: WEEKLY AGENTS WITH TOTAL VISIBLE LABELS
-new Chart(document.getElementById('chart-weekly-agents'), {
-  type: 'bar',
-  data: { 
-    labels: sortedAgents.map(function(a){return a.name;}), 
-    datasets: [{ 
-      data: sortedAgents.map(function(a){return a.total;}), 
-      backgroundColor: sortedAgents.map(function(a,i){ if(i<5) return 'rgba(34,197,94,0.7)'; if(i>=sortedAgents.length-6) return 'rgba(239,68,68,0.6)'; return 'rgba(59,130,246,0.5)'; }), 
-      borderRadius: 4, 
-      barPercentage: 0.65 
-    }] 
-  },
-  options: { 
-    indexAxis:'y', 
-    responsive:true, 
-    maintainAspectRatio:false, 
-    scales:{ 
-      x:{beginAtZero:true, grid:{color:'rgba(255,255,255,0.04)'}, ticks: {font: {size: 10}}}, 
-      y:{grid:{display:false},ticks:{font:{size:11}}} 
-    }, 
-    plugins:{
-      legend: { display: false },
-      tooltip:{callbacks:{label:function(ctx){return ctx.raw+' total transfers';}}}
-    } 
-  },
-  plugins: [
-    { 
-      id:'goalLineH', afterDraw:function(chart){ 
-        var x=chart.scales.x.getPixelForValue(50); 
-        var ctx=chart.ctx; 
-        ctx.save(); 
-        ctx.setLineDash([6,4]); 
-        ctx.strokeStyle='rgba(245,158,11,0.5)'; 
-        ctx.lineWidth=1.5; 
-        ctx.beginPath(); 
-        ctx.moveTo(x,chart.chartArea.top); 
-        ctx.lineTo(x,chart.chartArea.bottom); 
-        ctx.stroke(); 
-        ctx.fillStyle='#f59e0b'; 
-        ctx.font='600 9px Inter'; 
-        ctx.fillText('GOAL',x+4,chart.chartArea.top+10); 
-        ctx.restore(); 
-      } 
-    },
-    {
-      id: 'weeklyAgentsLabels',
-      afterDatasetsDraw: function(chart) {
-        var ctx = chart.ctx;
-        ctx.save();
-        ctx.font = '600 11px Inter';
-        ctx.fillStyle = '#e2e8f0';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        
-        var meta = chart.getDatasetMeta(0);
-        meta.data.forEach(function(bar, index) {
-          var dataValue = bar.$context.raw;
-          ctx.fillText(dataValue, bar.x + 6, bar.y);
-        });
-        ctx.restore();
-      }
-    }
-  ]
-});
+// ================================================================
+// ALL CHARTS
+// ================================================================
+function buildAllCharts() {
 
-var dispColors = ['#22c55e','#ef4444','#64748b','#f59e0b','#3b82f6','#a855f7','#ec4899','#14b8a6','#f97316','#06b6d4','#84cc16','#e11d48','#8b5cf6','#d946ef','#6366f1','#78716c'];
-var dispEntries = Object.entries(weeklyDispositions).sort(function(a,b){return b[1]-a[1];});
-new Chart(document.getElementById('chart-disposition-pie'), {
-  type:'doughnut',
-  data:{ labels:dispEntries.map(function(e){return e[0];}), datasets:[{data:dispEntries.map(function(e){return e[1];}),backgroundColor:dispColors.slice(0,dispEntries.length),borderWidth:0,hoverOffset:8}] },
-  options:{ responsive:true, maintainAspectRatio:false, cutout:'55%', plugins:{tooltip:{callbacks:{label:function(ctx){return ctx.label+': '+ctx.raw.toLocaleString()+' ('+((ctx.raw/40317)*100).toFixed(1)+'%)';}}}} }
-});
-
-var legendHtml = '';
-for (var i=0; i<dispEntries.length; i++) {
-  var e=dispEntries[i], pct=((e[1]/40317)*100).toFixed(1);
-  legendHtml += '<div class="flex items-center gap-2 py-0.5"><span class="w-2.5 h-2.5 rounded-sm flex-shrink-0" style="background:'+dispColors[i]+'"></span><span class="text-slate-300 flex-1 text-xs truncate">'+e[0]+'</span><span class="text-slate-500 text-xs w-12 text-right">'+e[1].toLocaleString()+'</span><span class="text-white text-xs w-12 text-right font-medium">'+pct+'%</span></div>';
-}
-document.getElementById('disposition-legend').innerHTML = legendHtml;
-
-// SLIDE 12: HANG UP CHART WITH TOTAL VISIBLE AT END
-new Chart(document.getElementById('chart-agent-hangup'), {
-  type:'bar',
-  data:{ 
-    labels:sortedByHangUp.map(function(a){return a.name;}), 
-    datasets:[{
-      label:'Client Hang Ups',
-      data:sortedByHangUp.map(function(a){return a.huTotal;}),
-      backgroundColor:sortedByHangUp.map(function(a){
-        var r=a.huTotal/1522; // max is approx 1522
-        if(r>0.85) return 'rgba(239,68,68,0.8)';
-        if(r>0.65) return 'rgba(239,68,68,0.55)';
-        if(r>0.45) return 'rgba(245,158,11,0.6)';
-        return 'rgba(245,158,11,0.35)';
+  // ── GOAL COMPLIANCE CHART ──────────────────────────────────
+  new Chart(document.getElementById('chart-goal-compliance'), {
+    type: 'bar',
+    data: {
+      labels: dailyData.map(function(d) {
+        return d.date + ' (' + d.day + ')';
       }),
-      borderRadius:4,
-      barPercentage:0.65
-    }] 
-  },
-  options:{ 
-    indexAxis:'y',
-    responsive:true,
-    maintainAspectRatio:false, 
-    scales:{ 
-      x:{beginAtZero:true, grid:{color:'rgba(255,255,255,0.04)'}, title:{display:true,text:'Number of Client Hang Ups',color:'#64748b',font:{size:10}}}, 
-      y:{grid:{display:false},ticks:{font:{size:11}}} 
-    }, 
-    plugins:{
-      legend: { display: false },
-      tooltip:{callbacks:{label:function(ctx){var ad=sortedByHangUp[ctx.dataIndex];var ds=ad.huDaily.map(function(d){return d.date+': '+d.hu;}).join(', ');return ctx.raw+' hang-ups ('+ds+')';}}} 
-    } 
-  },
-  plugins:[
-    {
-      id:'hangUpLabels',
-      afterDatasetsDraw: function(chart) {
-        var ctx = chart.ctx;
-        ctx.save();
-        ctx.font = '600 11px Inter';
-        ctx.fillStyle = '#e2e8f0';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        
-        var meta = chart.getDatasetMeta(0);
-        meta.data.forEach(function(bar, index) {
-          var dataValue = bar.$context.raw;
-          // Draw the text just after the end of the bar
-          ctx.fillText(dataValue, bar.x + 6, bar.y);
-        });
-        ctx.restore();
+      datasets: [{
+        label: 'Transfers',
+        data: dailyData.map(function(d) { return d.transfers; }),
+        backgroundColor: 'rgba(59,130,246,0.6)',
+        borderColor: '#3b82f6',
+        borderWidth: 1.5,
+        borderRadius: 6,
+        barPercentage: 0.6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { beginAtZero:true, max:180,
+             grid:{color:'rgba(255,255,255,0.04)'},
+             ticks:{stepSize:30} },
+        x: { grid:{display:false},
+             ticks:{font:{size:12,weight:'500'},color:'#94a3b8'} }
+      },
+      plugins: {
+        tooltip: { enabled:true, callbacks: {
+          label: function(ctx) { return ctx.raw + ' transfers'; },
+          afterLabel: function(ctx) {
+            var diff = ctx.raw - 150;
+            return diff >= 0
+              ? 'Above goal by ' + diff
+              : 'Below goal by ' + Math.abs(diff);
+          }
+        }}
+      },
+      layout: { padding: { top:20 } }
+    },
+    plugins: [
+      { id:'goalLinePlugin', afterDraw: function(chart) {
+          var y = chart.scales.y.getPixelForValue(150);
+          var ctx = chart.ctx; ctx.save();
+          ctx.setLineDash([8,5]); ctx.strokeStyle='#f59e0b'; ctx.lineWidth=2;
+          ctx.beginPath(); ctx.moveTo(chart.chartArea.left,y);
+          ctx.lineTo(chart.chartArea.right,y); ctx.stroke();
+          ctx.setLineDash([]); ctx.fillStyle='#f59e0b';
+          ctx.font='700 11px Inter'; ctx.textAlign='right';
+          ctx.fillText('GOAL: 150', chart.chartArea.right, y-8);
+          ctx.restore();
+      }},
+      { id:'barTotals', afterDatasetsDraw: function(chart) {
+          var ctx = chart.ctx; ctx.save();
+          ctx.font='700 13px Inter'; ctx.fillStyle='#ffffff';
+          ctx.textAlign='center'; ctx.textBaseline='bottom';
+          chart.getDatasetMeta(0).data.forEach(function(bar) {
+            ctx.fillText(bar.$context.raw, bar.x, bar.y-6);
+          });
+          ctx.restore();
+      }}
+    ]
+  });
+
+  // ── WEEKLY AGENTS CHART ────────────────────────────────────
+  new Chart(document.getElementById('chart-weekly-agents'), {
+    type: 'bar',
+    data: {
+      labels: sortedAgents.map(function(a) { return a.name; }),
+      datasets: [{
+        data: sortedAgents.map(function(a) { return a.total; }),
+        backgroundColor: sortedAgents.map(function(a,i) {
+          if (i < 5) return 'rgba(34,197,94,0.7)';
+          if (i >= sortedAgents.length-6) return 'rgba(239,68,68,0.6)';
+          return 'rgba(59,130,246,0.5)';
+        }),
+        borderRadius: 4,
+        barPercentage: 0.65
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive:true, maintainAspectRatio:false,
+      scales: {
+        x: { beginAtZero:true, grid:{color:'rgba(255,255,255,0.04)'},
+             ticks:{font:{size:10}} },
+        y: { grid:{display:false}, ticks:{font:{size:11}} }
+      },
+      plugins: {
+        legend: {display:false},
+        tooltip:{callbacks:{label:function(ctx){
+          return ctx.raw+' total transfers';
+        }}}
       }
     },
-    {
-      id:'avgLineHU', 
-      afterDraw:function(chart){ 
-        var totalHu=sortedByHangUp.reduce(function(s,a){return s+a.huTotal;},0); 
-        var avgHu=totalHu/sortedByHangUp.length; 
-        var x=chart.scales.x.getPixelForValue(avgHu); 
-        var ctx=chart.ctx; 
-        ctx.save(); 
-        ctx.setLineDash([6,4]); 
-        ctx.strokeStyle='rgba(239,68,68,0.4)'; 
-        ctx.lineWidth=1.5; 
-        ctx.beginPath(); 
-        ctx.moveTo(x,chart.chartArea.top); 
-        ctx.lineTo(x,chart.chartArea.bottom); 
-        ctx.stroke(); 
-        ctx.fillStyle='#f87171'; 
-        ctx.font='600 9px Inter'; 
-        ctx.fillText('AVG: '+Math.round(avgHu),x+4,chart.chartArea.top+10); 
-        ctx.restore(); 
-      } 
+    plugins: [
+      { id:'goalLineH', afterDraw:function(chart){
+          var x=chart.scales.x.getPixelForValue(50);
+          var ctx=chart.ctx; ctx.save();
+          ctx.setLineDash([6,4]);
+          ctx.strokeStyle='rgba(245,158,11,0.5)'; ctx.lineWidth=1.5;
+          ctx.beginPath(); ctx.moveTo(x,chart.chartArea.top);
+          ctx.lineTo(x,chart.chartArea.bottom); ctx.stroke();
+          ctx.fillStyle='#f59e0b'; ctx.font='600 9px Inter';
+          ctx.fillText('GOAL',x+4,chart.chartArea.top+10);
+          ctx.restore();
+      }},
+      { id:'weeklyAgentsLabels', afterDatasetsDraw:function(chart){
+          var ctx=chart.ctx; ctx.save();
+          ctx.font='600 11px Inter'; ctx.fillStyle='#e2e8f0';
+          ctx.textAlign='left'; ctx.textBaseline='middle';
+          chart.getDatasetMeta(0).data.forEach(function(bar){
+            ctx.fillText(bar.$context.raw, bar.x+6, bar.y);
+          });
+          ctx.restore();
+      }}
+    ]
+  });
+
+  // ── DISPOSITION PIE CHART ──────────────────────────────────
+  var dispColors = ['#22c55e','#ef4444','#64748b','#f59e0b','#3b82f6',
+    '#a855f7','#ec4899','#14b8a6','#f97316','#06b6d4','#84cc16',
+    '#e11d48','#8b5cf6','#d946ef','#6366f1','#78716c'];
+  var dispEntries = Object.entries(weeklyDispositions).sort(function(a,b){
+    return b[1]-a[1];
+  });
+  var totalCallsForPct = dailyData.reduce(function(s,d){
+    return s + d.calls;
+  }, 0) || 40317;
+
+  new Chart(document.getElementById('chart-disposition-pie'), {
+    type: 'doughnut',
+    data: {
+      labels: dispEntries.map(function(e){return e[0];}),
+      datasets: [{
+        data: dispEntries.map(function(e){return e[1];}),
+        backgroundColor: dispColors.slice(0, dispEntries.length),
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false, cutout:'55%',
+      plugins:{tooltip:{callbacks:{label:function(ctx){
+        return ctx.label+': '+ctx.raw.toLocaleString()+
+          ' ('+((ctx.raw/totalCallsForPct)*100).toFixed(1)+'%)';
+      }}}}
     }
-  ]
-});
+  });
+
+  var legendHtml = '';
+  for (var i=0; i<dispEntries.length; i++) {
+    var e = dispEntries[i];
+    var pct = ((e[1]/totalCallsForPct)*100).toFixed(1);
+    legendHtml +=
+      '<div class="flex items-center gap-2 py-0.5">' +
+        '<span class="w-2.5 h-2.5 rounded-sm flex-shrink-0" style="background:'+dispColors[i]+'"></span>' +
+        '<span class="text-slate-300 flex-1 text-xs truncate">'+e[0]+'</span>' +
+        '<span class="text-slate-500 text-xs w-12 text-right">'+e[1].toLocaleString()+'</span>' +
+        '<span class="text-white text-xs w-12 text-right font-medium">'+pct+'%</span>' +
+      '</div>';
+  }
+  document.getElementById('disposition-legend').innerHTML = legendHtml;
+
+  // ── HANG UP CHART ──────────────────────────────────────────
+  var maxHU = sortedByHangUp.length > 0 ? sortedByHangUp[0].huTotal : 1;
+  new Chart(document.getElementById('chart-agent-hangup'), {
+    type: 'bar',
+    data: {
+      labels: sortedByHangUp.map(function(a){return a.name;}),
+      datasets: [{
+        label: 'Client Hang Ups',
+        data: sortedByHangUp.map(function(a){return a.huTotal;}),
+        backgroundColor: sortedByHangUp.map(function(a){
+          var r = a.huTotal / maxHU;
+          if (r > 0.85) return 'rgba(239,68,68,0.8)';
+          if (r > 0.65) return 'rgba(239,68,68,0.55)';
+          if (r > 0.45) return 'rgba(245,158,11,0.6)';
+          return 'rgba(245,158,11,0.35)';
+        }),
+        borderRadius: 4,
+        barPercentage: 0.65
+      }]
+    },
+    options: {
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      scales: {
+        x: { beginAtZero:true, grid:{color:'rgba(255,255,255,0.04)'},
+             title:{display:true,text:'Number of Client Hang Ups',
+             color:'#64748b',font:{size:10}} },
+        y: { grid:{display:false}, ticks:{font:{size:11}} }
+      },
+      plugins: {
+        legend:{display:false},
+        tooltip:{callbacks:{label:function(ctx){
+          var ad = sortedByHangUp[ctx.dataIndex];
+          var ds = ad.huDaily.map(function(d){
+            return d.date+': '+d.hu;
+          }).join(', ');
+          return ctx.raw+' hang-ups ('+ds+')';
+        }}}
+      }
+    },
+    plugins: [
+      { id:'hangUpLabels', afterDatasetsDraw:function(chart){
+          var ctx=chart.ctx; ctx.save();
+          ctx.font='600 11px Inter'; ctx.fillStyle='#e2e8f0';
+          ctx.textAlign='left'; ctx.textBaseline='middle';
+          chart.getDatasetMeta(0).data.forEach(function(bar){
+            ctx.fillText(bar.$context.raw, bar.x+6, bar.y);
+          });
+          ctx.restore();
+      }},
+      { id:'avgLineHU', afterDraw:function(chart){
+          var totalHu = sortedByHangUp.reduce(function(s,a){
+            return s+a.huTotal;
+          },0);
+          var avgHu = totalHu / sortedByHangUp.length;
+          var x = chart.scales.x.getPixelForValue(avgHu);
+          var ctx = chart.ctx; ctx.save();
+          ctx.setLineDash([6,4]);
+          ctx.strokeStyle='rgba(239,68,68,0.4)'; ctx.lineWidth=1.5;
+          ctx.beginPath(); ctx.moveTo(x,chart.chartArea.top);
+          ctx.lineTo(x,chart.chartArea.bottom); ctx.stroke();
+          ctx.fillStyle='#f87171'; ctx.font='600 9px Inter';
+          ctx.fillText('AVG: '+Math.round(avgHu),x+4,chart.chartArea.top+10);
+          ctx.restore();
+      }}
+    ]
+  });
+}
+
+// ================================================================
+// START — Load archive first, fallback to default data
+// ================================================================
+rebuildAgentTotals();
+buildTopPerformers();
+buildBottomPerformers();
+buildAllCharts();
+loadArchive();
+
 </script>
 </body>
 </html>
